@@ -30,7 +30,6 @@ class cympuserAdminModel extends cympuser
 	 */
 	function getCympuserMemberList()
 	{
-		debugprint("ASDF");
 		// Search option
 		$args = new stdClass();
 		$args->is_admin = Context::get('is_admin')=='Y'?'Y':'';
@@ -133,10 +132,39 @@ class cympuserAdminModel extends cympuser
 		$args->page = Context::get('page');
 		$args->list_count = 20;
 		$args->page_count = 10;
-		debugprint($query_id);
 		$output = executeQuery($query_id, $args);
 
 		return $output;
+	}
+
+
+	function getCympuserAdminItemList()
+	{
+		$oNproductModel = &getModel('nproduct');
+
+		$member_srl = Context::get('member_srl');
+		$target = Context::get('target');
+		if(!$target) $target = 'nstore';
+
+		$args->proc_module = $target;
+		$output = executeQueryArray('cympuser.getItemList', $args);
+		if(!$output->toBool()) return $output;
+
+		$item_list = $output->data;
+		$retobj = $oNproductModel->discountItems($item_list);
+
+		debugprint($item_list);
+		$list_config = $oNproductModel->getListConfig(null);
+		Context::set('list', $item_list);
+		Context::set('target', $target);
+		Context::set('member_srl', $member_srl);
+
+		$path = $this->module_path."tpl/".$module_info->skin;
+		$file_name = "addOrderForm.html";
+		$oTemplate = &TemplateHandler::getInstance();
+		$data = $oTemplate->compile($path, $file_name);
+		$this->add('tpl', $data);
+
 	}
 
 }

@@ -1,0 +1,92 @@
+<script>
+	jQuery('#button_add_class').on('click', function(event) {
+		var item_srls = new Array();
+		var size = 0;
+
+		jQuery('input:checkbox[id^="selected_items_"]:checked').each(function(){
+			var item_srl = jQuery(this).val();
+			item_srls.push(item_srl);
+			size = item_srls.length;
+		});
+
+		if(size < 1) {
+			alert("선택된 강의가 없습니다.");
+			return;
+		}
+		
+		var is_free = 'N';
+		if (confirm('무료처리하시겠습니까?'))
+		{
+			is_free = 'Y';
+		}
+		jQuery('#is_free').val(is_free);
+		jQuery('#admin_add_class').submit();
+
+	});
+
+	function setChecked(item_srl) {
+		var target = "#selected_items_" + item_srl;
+		if(jQuery(target).is(":checked"))
+		{
+			jQuery(target).attr("checked", false);
+		}
+		else 
+		{
+			jQuery(target).attr("checked", true)
+		}
+	}
+</script>
+<load target="css/classlist.css" />
+<div class="event_banner">
+	<h3><a href="{$module_info->banner_url}" target="_top"><img cond="$module_info->banner_image" src="{$module_info->banner_image}" alt="橫幅圖片" /></a></h3>
+</div><!-- event_banner-->
+
+<div id="itemlist" class="page">
+	<form class="list_header" cond="0">
+		<input type="hidden" name="vid" value="{$vid}" />
+		<input type="hidden" name="mid" value="{$mid}" />
+		<input type="hidden" name="act" value="{$act}" />
+		<input type="hidden" name="category" value="{$category}" />
+		<input type="hidden" name="error_return_url" value="" />
+		<input type="hidden" name="listStyle" value="{$listStyle}" />
+	</form>
+	<div class="product_list">
+		<form id="admin_add_class">
+			<input type="hidden" name="target" value="{$target}" />
+			<input type="hidden" name="member_srl" value="{$member_srl}" />
+			<input type="hidden" name="act" value="procCympuserAdminAddProduct" />
+			<input type="hidden" id="is_free" name="is_free" />
+			<input type="hidden" name="success_return_url" value="{getUrl('module', 'cympusadmin', 'act', 'dispCympuserAdminMemberInsert', 'member_srl', $member_srl)}" />
+			<table class="x_table x_table-striped x_table-hover" width="100%">
+				<thead>
+					<tr>
+						<th>&nbsp;</th>
+						<th>Item_srl</th>
+						<th>이미지</th>
+						<th>제품 이름</th>
+						<th>가격</th>
+				</thead>
+				<tbody>
+					<tr onclick="setChecked({$val->item_srl})" id="item_{$val->item_srl}" loop="$list=>$no,$val">
+						<td><input type="checkbox" id="selected_items_{$val->item_srl}" name="item_srl[]" value="{$val->item_srl}" /></td>
+						<td>{$val->item_srl} </td>
+						<td><a href="#" onclick="return false;"><img src="{$val->getThumbnail($module_info->list_thumbnail_width,$module_info->list_thumbnail_height,$module_info->list_thumbnail_type)}" /></a></td>
+						<td class="item_name">
+							<p><a href="#" onclick="return false;">{$val->item_name}</a></p>
+							<ul class="list">
+								<li loop="$val->extra_var_objs => $obj" cond="!in_array($obj->column_name, array('period','period_unit'))">{$obj->column_title} : {$obj->value}</li>
+							</ul>
+						</td>
+						<td>{$val->price}</td>
+					</tr>
+					<tr cond="!count($list)">
+						<td colspan="6">{$lang->msg_no_items}</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="x_modal-footer">
+				<input type="button" id="button_add_class" class="x_btn x_btn-inverse" value="관리자 권한으로 추가하기" />
+			</div>
+		</form>
+	</div>
+</div><!-- itemlist -->

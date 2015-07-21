@@ -1,0 +1,35 @@
+        <form cond="$class_page_navigation" action="./" class="x_pagination x_pull-left" no-error-return-url="true" style="margin-top:0">
+                {@
+                        $urlInfo = parse_url(getRequestUriByServerEnviroment());
+                        parse_str($urlInfo['query'], $param);
+                }
+                <input loop="$param => $key, $val" cond="!in_array($key, array('mid', 'vid', 'act'))" type="hidden" name="{$key}" value="{$val}" />
+                <ul>
+                        <li class="x_disabled"|cond="!$class_page || $class_page == 1"><a href="{getUrl('class_page', '')}">&laquo; {$lang->first_page}</a></li>
+                        <block cond="$class_page_navigation->first_page != 1 && $class_page_navigation->first_page + $class_page_navigation->page_count > $class_page_navigation->last_page - 1 && $class_page_navigation->page_count != $class_page_navigation->total_page">
+                        {@$isGoTo = true}
+                        <li>
+                                <a href="#goTo" data-toggle title="{$lang->cmd_go_to_page}">&hellip;</a>
+                                <span cond="$isGoTo" id="goTo" class="x_input-append">
+                                        <input type="number" min="1" max="{$class_page_navigation->last_page}" required name="class_page" title="{$lang->cmd_go_to_page}" />
+                                        <button type="submit" class="x_add-on">Go</button>
+                                </span>
+                        </li>
+                        </block>
+                        <!--@while($page_no = $class_page_navigation->getNextPage())-->
+                        {@$last_page = $page_no}
+                        <li class="x_active"|cond="$page_no == $class_page"><a  href="{getUrl('class_page', $page_no)}">{$page_no}</a></li>
+                        <!--@end-->
+                        <block cond="$last_page != $class_page_navigation->last_page && $last_page + 1 != $class_page_navigation->last_page">
+                        {@$isGoTo = true}
+                        <li>
+                                <a href="#goTo" data-toggle title="{$lang->cmd_go_to_page}">&hellip;</a>
+                                <span cond="$isGoTo" id="goTo" class="x_input-append">
+                                        <input type="number" min="1" max="{$class_page_navigation->last_page}" required name="class_page" title="{$lang->cmd_go_to_page}" />
+                                        <button type="submit" class="x_add-on">Go</button>
+                                </span>
+                        </li>
+                        </block>
+                        <li class="x_disabled"|cond="$class_page == $class_page_navigation->last_page"><a href="{getUrl('class_page', $class_page_navigation->last_page)}" title="{$class_page_navigation->last_page}">{$lang->last_page} &raquo;</a></li>
+                </ul>
+        </form>
