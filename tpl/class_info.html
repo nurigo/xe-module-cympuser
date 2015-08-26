@@ -58,15 +58,15 @@
 						<td><input type="hidden" name="cart_srls[]" value="{$order->cart_srl}" /><input type="checkbox" id="checkbox_{$order->cart_srl}" name="cart[]" value="{$order->cart_srl}" /></td>
 						<td>{zdate($order->regdate,'Y-m-d')}</td>
 						<td>{$order->item_name}</td>
-						<td class="change_to_input" data-target="period_days" data-cart_srl="{$order->cart_srl}">
+						<td class="change_to_input" data-mid="{$mid}" data-target="period_days" data-cart_srl="{$order->cart_srl}">
 							<span id="period_days_{$order->cart_srl}">{$order->period_days}</span></td>
-						<td cond="strlen($order->startdate)==14" class="change_to_input" data-target="startdate"  data-cart_srl="{$order->cart_srl}">
+						<td cond="strlen($order->startdate)==14" class="change_to_input" data-mid="{$mid}" data-target="startdate"  data-cart_srl="{$order->cart_srl}">
 							<span id="startdate_{$order->cart_srl}">{zdate($order->startdate,'Y-m-d')}</span></td>
-						<td cond="strlen($order->startdate)!=14" class="change_to_input" data-target="startdate"  data-cart_srl="{$order->cart_srl}">
+						<td cond="strlen($order->startdate)!=14" class="change_to_input" data-mid="{$mid}" data-target="startdate"  data-cart_srl="{$order->cart_srl}">
 							<span id="startdate_{$order->cart_srl}">{$order->startdate}</span></td>
-						<td cond="strlen($order->enddate)==14" class="change_to_input" data-target="enddate"  data-cart_srl="{$order->cart_srl}">
+						<td cond="strlen($order->enddate)==14" class="change_to_input" data-mid="{$mid}" data-target="enddate"  data-cart_srl="{$order->cart_srl}">
 							<span id="enddate_{$order->cart_srl}">{zdate($order->enddate,'Y-m-d')}</span></td>
-						<td cond="strlen($order->enddate)!=14" class="change_to_input" data-target="enddate"  data-cart_srl="{$order->cart_srl}">
+						<td cond="strlen($order->enddate)!=14" class="change_to_input" data-mid="{$mid}" data-target="enddate"  data-cart_srl="{$order->cart_srl}">
 							<span id="enddate_{$order->cart_srl}">{$order->enddate}</span></td>
 						<td>{number_format($order->price)}</td>
 						<td title="{$order->memo}">{cut_str($order->memo,20)}</td>

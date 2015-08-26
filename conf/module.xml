@@ -2,6 +2,10 @@
 <module>
     <grants />
 	<permissions>
+		<permission action="dispCympuserAdminMemberList" target="manager" />
+		<permission action="dispCympuserAdminMemberInsert" target="manager" />
+		<permission action="procCympuserAdminChangeDates" target="manager" />
+		<permission action="procCympuserAdminAddClassDays" target="manager" />
 	</permissions>
 	<menus>
 	</menus>

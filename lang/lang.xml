@@ -9,7 +9,7 @@
 		<value xml:lang="en"><![CDATA[Textbook Information]]></value>
 	</item>
 	<item name="payment_info">
-		<value xml:lang="ko"><![CDATA[결재정보]]></value>
+		<value xml:lang="ko"><![CDATA[결제정보]]></value>
 		<value xml:lang="en"><![CDATA[Payment Information]]></value>
 	</item>
 	<item name="member_management">

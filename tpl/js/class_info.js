@@ -127,6 +127,7 @@ jQuery(function($) {
 		$newE.on('blur', function() {
 			var cart_srl = $e.attr('data-cart_srl');
 			var target = $e.attr('data-target');
+			var mid = $e.attr('data-mid');
 			var value = $(this).val();
 			var id = target + '_' + cart_srl;
 			$(this).parent().html('<span id=' + id + '>' + $(this).val() + '</span>');
@@ -134,7 +135,7 @@ jQuery(function($) {
 			exec_xml(
 				'cympuser',
 				'procCympuserAdminChangeDates',
-				{cart_srl:cart_srl, target:target, value:value},
+				{cart_srl:cart_srl, target:target, value:value, mid:mid},
 				function(ret){
 					$('#period_days_' + cart_srl).html(ret['period_days']);
 					$('#startdate_' + cart_srl).text(ret['startdate']);

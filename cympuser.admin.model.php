@@ -8,6 +8,9 @@
 class cympuserAdminModel extends cympuser 
 {
 
+	/**
+	 * @brief get teamplate for deleting cympuser module instance
+	 */
 	function getCympuserAdminDelete() 
 	{
 		// get configs.
@@ -28,7 +31,7 @@ class cympuserAdminModel extends cympuser
 	 * 
 	 * @return object|array (object : when member count is 1, array : when member count is more than 1)
 	 */
-	function getCympuserMemberList()
+	function getCympuserAdminMemberList()
 	{
 		// Search option
 		$args = new stdClass();
@@ -137,7 +140,9 @@ class cympuserAdminModel extends cympuser
 		return $output;
 	}
 
-
+	/**
+	 * @brief  get cmpuser adminlist
+	 */
 	function getCympuserAdminItemList()
 	{
 		$oNproductModel = &getModel('nproduct');

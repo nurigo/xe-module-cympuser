@@ -129,7 +129,7 @@ class cympuserAdminView extends cympuser
 
 		$oCympuserAdminModel = getAdminModel('cympuser');
 		$oMemberModel = getModel('member');
-		$output = $oCympuserAdminModel->getCympuserMemberList();
+		$output = $oCympuserAdminModel->getCympuserAdminMemberList();
 
 		$filter = Context::get('filter_type');
 		global $lang;
@@ -310,17 +310,6 @@ class cympuserAdminView extends cympuser
 
 			}
 
-			/*
-			$cart_srl = array();
-			foreach($output->data as $row => $val)
-			{
-				$cart_srl[] = $val->cart_srl;
-			}
-			$args->cart_srl = $cart_srl;
-			debugprint($args);
-			$output = executeQuery('elearning.getEnrollments', $args);
-			debugprint($output);
-			 */
 			if(!$output->toBool()) return $output;
 
 			if(!$this->memberInfo)
