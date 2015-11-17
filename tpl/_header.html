@@ -14,7 +14,7 @@
 		<a href="{getUrl('act', 'dispCympuserAdminMemberList', 'member_srl', '', 'page', '1', 'epay_page', '', 'textbook_page', '', 'class_page', '')}">회원목록</a></li>
 	<li class="x_active"|cond="$act=='dispCympuserAdminMemberInsert'"><a href="{getUrl('act', 'dispCympuserAdminMemberInsert', 'member_srl', $member_srl)}">기본정보</a></li>
 </ul>
-<ul cond="$member_srl" class="nav-tabs">
+<ul cond="$member_srl && $act=='dispCympuserAdminMemberInsert'" class="nav-tabs">
 	<a href="#elearning_management">수강정보</a> &nbsp;
 	<a href="#nstore_management">교재정보</a> &nbsp;
 	<a href="#epay_management">결재정보</a>
@@ -28,6 +28,3 @@
 <div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
 	<p>{$XE_VALIDATOR_MESSAGE}</p>
 </div>
-
-
-

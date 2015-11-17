@@ -119,6 +119,12 @@ class cympuserAdminView extends cympuser
 	 */
 	function dispCympuserAdminMemberList()
 	{
+		$module = Context::get('module');
+		if($module == "admin") {
+			Context::set("module", "cympusadmin");
+			$this->dispCympuserAdminMemberList();
+		}
+
 		$classfile = _XE_PATH_.'modules/cympusadmin/cympusadmin.class.php';
 		if(file_exists($classfile))
 		{
@@ -205,6 +211,40 @@ class cympuserAdminView extends cympuser
 		$this->setTemplateFile('member_list');
 	}
 
+	/* cympuser 기본정보 페이지 */
+	function dispCympuserAdminMemberInfo()
+	{
+		$member_srl = Context::get('member_srl');
+		$input = new stdClass();
+		$input->member_srl = $member_srl;
+		$output = ModuleHandler::triggerCall('cympuser.getMemberInfo', 'before', $input);
+		if(!$output->toBool()) return $output;
+		if($input->infos['profile']->member_info) 
+		{
+			$profile = $input->infos['profile']->member_info;
+			Context::set('profile', $profile);
+		}
+
+		$this->setTemplateFile('member_info2');
+	}
+
+	/* cympuser 계정정보 페이지 */
+	function dispCympuserAdminAccountInfo()
+	{
+		$member_srl = Context::get('member_srl');
+		$input = new stdClass();
+		$input->member_srl = $member_srl;
+		$output = ModuleHandler::triggerCall('cympuser.getAccountInfo', 'before', $input);
+		if(!$output->toBool()) return $output;
+		debugprint($input);
+		if($input->infos['profile']->account_info) 
+		{
+			$account = $input->infos['profile']->account_info;
+			Context::set('account', $account);
+		}
+
+		$this->setTemplateFile('account_info');
+	}
 	/**
 	 * display member insert form
 	 *
@@ -318,7 +358,7 @@ class cympuserAdminView extends cympuser
 			}
 			else
 			{
-				Context::set('member_info',$member_srl);
+				Context::set('member_srl',$member_srl);
 				Context::set('member_info',$this->memberInfo);
 			}
 		}

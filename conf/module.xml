@@ -14,6 +14,8 @@
 		<action name="dispCympuserAdminModInsert" type="view" />
         <action name="dispCympuserAdminMemberList" type="view" admin_index="true" />
 		<action name="dispCympuserAdminMemberInsert" type="view" />
+		<action name="dispCympuserAdminMemberInfo" type="view" />
+		<action name="dispCympuserAdminAccountInfo" type="view" />
 		<action name="dispCympuserAdminGrantInfo" type="view" />
 
 		<action name="procCympuserAdminModInsert" type="controller" />
