@@ -245,9 +245,27 @@ class cympuserAdminView extends cympuser
 
 		$this->setTemplateFile('account_info');
 	}
+
+	/* cympuser 생활관리 페이지 */
+	function dispCympuserAdminGuidanceInfo()
+	{
+		$member_srl = Context::get('member_srl');
+		$input = new stdClass();
+		$input->member_srl = $member_srl;
+		$output = ModuleHandler::triggerCall('cympuser.getGuidanceInfo', 'before', $input);
+		if(!$output->toBool()) return $output;
+		debugprint($input);
+		if($input->infos['profile']->guidance_info) 
+		{
+			$guidance = $input->infos['profile']->guidance_info;
+			Context::set('guidance', $guidance);
+		}
+
+		$this->setTemplateFile('guidance_info');
+	}
+
 	/**
 	 * display member insert form
-	 *
 	 * @return void
 	 */
 	function dispCympuserAdminMemberInsert()
