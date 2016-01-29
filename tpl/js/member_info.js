@@ -1,5 +1,19 @@
 (function($) {
 	jQuery(function($) {
+		$('a.modalAnchor.changeProfileImage').bind('before-open.mw', function(event) {
+			var member_srl = $(this).attr('data-member_srl'),
+			params = new Array();
+			params['member_srl'] = member_srl;
+			console.log(member_srl);
+			exec_xml( 'profile', 'getProfileAdminChangeProfileImageForm', params,
+				function(ret) {
+					var tpl = ret.tpl;
+					$('#change_profile_image').html(tpl);
+				},
+				['error', 'message', 'tpl']
+			);
+		});
+
 		$('a.modalAnchor.deleteOrders').bind('before-open.mw', function(event){
 			// get checked items.
 			var a = [];

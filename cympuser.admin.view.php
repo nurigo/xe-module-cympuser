@@ -214,6 +214,9 @@ class cympuserAdminView extends cympuser
 	/* cympuser 기본정보 페이지 */
 	function dispCympuserAdminMemberInfo()
 	{
+		$oModuleModel = &getModel('module');
+		$module_info = $oModuleModel->getModuleInfoXml('cympusadmin');
+		
 		$member_srl = Context::get('member_srl');
 		$input = new stdClass();
 		$input->member_srl = $member_srl;
@@ -221,10 +224,25 @@ class cympuserAdminView extends cympuser
 		if(!$output->toBool()) return $output;
 		if($input->infos['profile']->member_info) 
 		{
-			$profile = $input->infos['profile']->member_info;
-			Context::set('profile', $profile);
+			$contents = $input->infos['profile']->member_info;
+			Context::set('contents', $contents);
 		}
+		$this->setTemplateFile('member_info2');
+	}
 
+	/* cympuser 학습관리 페이지 */
+	function dispCympuserAdminStudyInfo()
+	{
+		$member_srl = Context::get('member_srl');
+		$input = new stdClass();
+		$input->member_srl = $member_srl;
+		$output = ModuleHandler::triggerCall('cympuser.getStudyInfo', 'before', $input);
+		if(!$output->toBool()) return $output;
+		if($input->infos['study']->study_info)
+		{
+			$contents = $input->infos['study']->study_info;
+			Context::set('contents', $contents);
+		}
 		$this->setTemplateFile('member_info2');
 	}
 
@@ -236,14 +254,13 @@ class cympuserAdminView extends cympuser
 		$input->member_srl = $member_srl;
 		$output = ModuleHandler::triggerCall('cympuser.getAccountInfo', 'before', $input);
 		if(!$output->toBool()) return $output;
-		debugprint($input);
 		if($input->infos['profile']->account_info) 
 		{
-			$account = $input->infos['profile']->account_info;
-			Context::set('account', $account);
+			$contents = $input->infos['profile']->account_info;
+			Context::set('contents', $contents);
 		}
 
-		$this->setTemplateFile('account_info');
+		$this->setTemplateFile('member_info2');
 	}
 
 	/* cympuser 생활관리 페이지 */
@@ -254,14 +271,13 @@ class cympuserAdminView extends cympuser
 		$input->member_srl = $member_srl;
 		$output = ModuleHandler::triggerCall('cympuser.getGuidanceInfo', 'before', $input);
 		if(!$output->toBool()) return $output;
-		debugprint($input);
 		if($input->infos['profile']->guidance_info) 
 		{
-			$guidance = $input->infos['profile']->guidance_info;
-			Context::set('guidance', $guidance);
+			$contents = $input->infos['profile']->guidance_info;
+			Context::set('contents', $contents);
 		}
 
-		$this->setTemplateFile('guidance_info');
+		$this->setTemplateFile('member_info2');
 	}
 
 	/**

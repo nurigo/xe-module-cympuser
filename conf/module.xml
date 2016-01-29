@@ -16,6 +16,7 @@
 		<action name="dispCympuserAdminMemberInsert" type="view" />
 		<action name="dispCympuserAdminMemberInfo" type="view" />
 		<action name="dispCympuserAdminAccountInfo" type="view" />
+		<action name="dispCympuserAdminStudyInfo" type="view" />
 		<action name="dispCympuserAdminGuidanceInfo" type="view" />
 		<action name="dispCympuserAdminGrantInfo" type="view" />
 
