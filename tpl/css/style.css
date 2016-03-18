@@ -1,4 +1,7 @@
 /* target modules */
 ul.midCommand { float:left; margin:0 0 0 10px;; padding:0; *zoom:1; }
 ul.midCommand li { display:block; margin-bottom:5px; list-style:none;}
+.iconMoveTo { display:inline-block; background:url(../img/iconMoveTo.gif) no-repeat !important; width:18px; height:32px; }
+.iconMoveTo:hover { background:url(../img/iconMoveTo.gif) bottom no-repeat !important; cursor:move; width:18px; height:32px; }
+
 
