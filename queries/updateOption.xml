@@ -1,0 +1,17 @@
+<query id="updateOption" action="update">
+	<tables>
+		<table name="cympuser_options" />
+	</tables>
+	<columns>
+		<column name="column_type" var="column_type" />
+		<column name="column_name" var="column_name" />
+		<column name="column_title" var="column_title" />
+		<column name="required" var="required"  />
+		<column name="default_value" var="default_value" />
+		<column name="is_active" var="is_active"  />
+		<column name="description" var="description" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="option_srl" var="option_srl" notnull="notnull" />
+	</conditions>
+</query>

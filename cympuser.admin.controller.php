@@ -324,5 +324,217 @@ class cympuserAdminController extends cympuser
 		$date = date('Y-m-d', strtotime($date));
 		return $timestamp ? true : false;
 	}
+
+	function procCympuserAdminAddOptions()
+	{
+		$group_list = Context::get('group_list');
+
+		$args->group_srl = Context::get('group_srl');
+		$args->option_srl = Context::get('option_srl');
+		$args->column_type = Context::get('column_type');
+		$args->column_name = strtolower(Context::get('column_name'));
+		$args->column_title = Context::get('column_title');
+		$args->default_value = explode("\n", str_replace("\r", '', Context::get('default_value')));
+		$args->required = Context::get('required');
+		$args->is_active = (isset($args->required));
+		$args->description = Context::get('description');
+		if(!in_array(strtoupper($args->required), array('Y','N')))
+		{
+			$args->required = 'N';
+		}
+
+		if($group_list && is_array($group_list))
+		{
+			$error = array();
+			foreach($group_list as $val) 
+			{
+				$args->group_srl = $val;
+				// check column_name
+				if(!$args->option_srl && $this->checkColumnName($args->group_srl, $args->column_name)) 
+				{
+					$this->setMessage += "Error: group_srl $args->group_srl 에 $args->column_name 와 같은 이름 존재";
+					continue;
+				}	
+
+				$output = $this->insertOptions($args);
+				$args->option_srl = null;
+				if(!$output->toBool()) return $error[] = $output;
+			}
+
+			if($error) debugprint($error);
+		}
+		else
+		{
+			// check column_name
+			if(!$args->option_srl && $this->checkColumnName($args->group_srl, $args->column_name)) return new Object(-1, 'msg_invalid_column_name');
+
+			$output = $this->insertOptions($args);
+			if(!$output->toBool()) return $output;
+		}
+
+		if(!in_array(Context::getRequestMethod(),array('XMLRPC','JSON'))) 
+		{
+			$returnUrl = Context::get('success_return_url') ? Context::get('success_return_url') : getNotEncodedUrl('', 'module', Context::get('module'), 'act', 'dispCympuserAdminAddOptions');
+			$this->setRedirectUrl($returnUrl);
+			return;
+		}
+	}
+
+	function checkColumnName($group_srl, $column_name)
+	{
+		// check in reserved keywords
+		if(in_array($column_name, array('module','act','module_srl','category_id', 'document_srl','description', 'delivery_info', 'item_srl','proc_module','category_depth1','category_depth2','category_depth3','category_depth4','thumbnail_image','contents_file'))) return TRUE;
+		// check in extra keys
+		$args->column_name = $column_name;
+		$args->group_srl = $group_srl;
+		$output = executeQuery('cympuser.isExistsExtraKey', $args);
+		if($output->data->count) return TRUE;
+		return FALSE;
+	}
+	
+
+	function insertOptions($args)
+	{
+		$oCympuserModel = &getModel('cympuser');
+
+		// Default values
+		if(in_array($args->column_type, array('checkbox','select','radio')) && count($args->default_value) ) 
+		{
+			$args->default_value = serialize($args->default_value);
+		} 
+
+		// Update if option_srl exists, otherwise insert.
+		if(!$args->option_srl)
+		{
+			$args->list_order = $args->option_srl = getNextSequence();
+			$output = executeQuery('cympuser.insertOption', $args);
+			$this->setMessage('success_registed');
+		}
+		else
+		{
+			$output = executeQuery('cympuser.updateOption', $args);
+			$this->setMessage('success_updated');
+		}
+
+		$options_list = $oCympuserModel->getCympuserOptionsList();
+		$this->_createInsertMemberRuleset($options_list);
+
+		return $output;
+	}
+
+	
+	function procCympuserAdminUpdateOptionsOrder() 
+	{
+		$order = Context::get('order');
+		parse_str($order);
+		$idx = 1;
+		if(!is_array($record)) return;
+
+		foreach ($record as $option_srl) 
+		{
+			$args->option_srl = $option_srl;
+			$args->list_order = $idx;
+			$output = executeQuery('cympuser.updateOptionsOrder', $args);
+			if(!$output->toBool()) return $output;
+			$idx++;
+		}
+	}
+
+	function procCympuserAdminUpdateOptions()
+	{
+		$args = Context::gets('option_srl', 'column_type', 'column_name', 'required', 'default_value', 'is_active', 'description');
+		debugprint($args);
+		$output = executeQuery('cympuser.updateOption', $args);
+		debugprint($output);
+		if(!$output->toBool()) return $output;
+
+	}
+
+	function procCympuserAdminDeleteOptions()
+	{
+		$oCympuserModel = &getModel('cympuser');
+		$option_srl = Context::get('option_srl');
+		if(!$option_srl) return new Object(-1, 'option_srl is null');
+
+		$args->option_srl = $option_srl;
+		$output = executeQuery('cympuser.deleteOption', $args);
+		if(!$output->toBool()) return $output;
+
+		$option_list = $oCympuserModel->getCympuserOptionsList();
+		$this->_createInsertMemberRuleset($option_list);
+		$this->setMessage('success_deleted');
+
+		$success_return_url = Context::get("success_return_url");
+		if($success_return_url) 
+		{
+			$this->setRedirectUrl($success_return_url);
+			return;
+		}
+		$redirectUrl = getNotEncodedUrl('', 'module', Context::get('module'), 'act', 'dispCympuserAdminAddOptions');
+		$this->setRedirectUrl($redirectUrl);
+	}
+
+	/**
+	 * @brief create dynamic insert member ruleset
+	 **/
+	function _createInsertMemberRuleset($extra_vars)
+	{
+		//PHP_EOL = end of line 엔터키를 친 효과
+		$xml_file = './files/ruleset/cympuser_insertMember.xml';
+		$buff = '<?xml version="1.0" encoding="utf-8"?>' . PHP_EOL
+				.'<ruleset version="1.5.0">' . PHP_EOL
+				.'  <customrules>' . PHP_EOL
+				.'  </customrules>' . PHP_EOL
+				.'  <fields>' . PHP_EOL . '%s' . PHP_EOL . '  </fields>' . PHP_EOL
+				.'</ruleset>' . PHP_EOL;
+
+		$fields = array();
+		$fields[] = '    <field name="member_srl" required="true" />' . PHP_EOL;
+		$fields[] = '    <field name="user_name" required="true" />' . PHP_EOL;
+		$fields[] = '    <field name="sex" required="true" />' . PHP_EOL;
+		$fields[] = '    <field name="is_lunar" required="false" />' . PHP_EOL;
+		$fields[] = '    <field name="is_new" required="false" />' . PHP_EOL;
+		
+		if(count($extra_vars))
+		{
+			foreach($extra_vars as $formInfo){
+				if($formInfo->required=='Y')
+				{
+					if($formInfo->column_type == 'tel' || $formInfo->type == 'kr_zip')
+					{
+						$fields[] = sprintf('    <field name="%s[]">"', $formInfo->column_name) . PHP_EOL;
+						$fields[] = sprintf('      <if test="$group_srl == \'%s\'" attr="required" value="true" />', $formInfo->group_srl) . PHP_EOL;
+						$fields[] = '    </field>' . PHP_EOL;
+					}
+					else if($formInfo->column_type == 'email_address')
+					{
+						$fields[] = sprintf('    <field name="%s" rule="email">', $formInfo->column_name) . PHP_EOL;
+						$fields[] = sprintf('      <if test="$group_srl == \'%s\'" attr="required" value="true" />', $formInfo->group_srl) . PHP_EOL;
+						$fields[] = '    </field>' . PHP_EOL;
+					}
+					else if($formInfo->column_type == 'user_id')
+					{
+						$fields[] = sprintf('    <field name="%s" rule="userid" length="3:20" >', $formInfo->column_name) . PHP_EOL;
+						$fields[] = sprintf('      <if test="$group_srl == \'%s\'"  attr="required" value="true" />', $formInfo->group_srl) . PHP_EOL;
+						$fields[] = '    </field>' . PHP_EOL;
+					}
+					else
+					{
+						$fields[] = sprintf('    <field name="%s" >', $formInfo->column_name) . PHP_EOL;
+						$fields[] = sprintf('      <if test="$group_srl == \'%s\'" attr="required" value="true" />', $formInfo->group_srl) . PHP_EOL;
+						$fields[] = '    </field>' . PHP_EOL;
+					}
+				}
+			}
+		}
+
+		$xml_buff = sprintf($buff, implode('', $fields));
+		FileHandler::writeFile($xml_file, $xml_buff);
+		unset($xml_buff);
+
+		$validator   = new Validator($xml_file);
+		$validator->setCacheDir('files/cache');
+		$validator->getJsPath();
+	}
 }
 ?>

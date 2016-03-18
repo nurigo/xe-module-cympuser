@@ -1,0 +1,14 @@
+<query id="getOptionInfo" action="select">
+	<tables>
+		<table name="cympuser_options" />
+	</tables>
+	<columns>
+		<column name="*" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="option_srl" var="option_srl" notnull="notnull" />
+	</conditions>
+	<navigation>
+		<index var="sort_index" default="list_order" order="asc" />
+	</navigation>
+</query>

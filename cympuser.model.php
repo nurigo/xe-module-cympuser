@@ -38,4 +38,45 @@ class cympuserModel extends cympuser
 			}
 		}
 	}
+
+	function getCympuserOptionsList($group_srl=null, $is_active=false)
+	{
+		if(is_array($group_srl))
+		{
+			$args->group_srls = $group_srl;
+		}
+		else
+		{
+			$args->group_srl = $group_srl;
+		}
+		$args->is_active = $is_active;
+		$output = executeQueryArray('cympuser.getOptionList', $args);
+		if(!$output->toBool()) return $output;
+		$options_list = $output->data;
+
+		$check_duplicate = array();
+		$list = array();
+		foreach($options_list as &$val) 
+		{
+			//다중 group_srl 로 중복된 필드가 있을경우 패스
+			if(in_array($val->column_name, $check_duplicate)) continue;
+
+			if($val->default_value) $val->default_value = unserialize($val->default_value);
+			$list[] = $val;
+			$check_duplicate[] = $val->column_name;
+		}
+		return $list;
+	}
+
+	function getCympuserOptionInfo($group_srl)
+	{
+		$args->group_srl = $group_srl;
+		$output = executeQuery('cympuser.getOptionInfo', $args);
+		if(!$output->toBool()) return $output;
+
+		$option_info = $output->data;
+		return $option_info;
+	}
+
+
 }

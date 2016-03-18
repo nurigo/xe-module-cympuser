@@ -172,5 +172,35 @@ class cympuserAdminModel extends cympuser
 
 	}
 
+	function getCympuserAdminInsertOptions()
+	{
+		$oMemberModel = &getModel('member');
+		$group_list = $oMemberModel->getGroups();
+		Context::set('group_list', $group_list);
+
+		$group_srl = Context::get('group_srl');
+		$option_srl = Context::get('option_srl');
+		if($option_srl)
+		{
+			$args->option_srl = $option_srl;
+			$output = executeQuery('cympuser.getOptionInfo', $args);
+
+			if($output->toBool() && $output->data)
+			{
+				$formInfo = $output->data;
+				$default_value = $formInfo->default_value;
+				if($default_value)
+				{
+					$default_value = unserialize($default_value);
+					Context::set('default_value', $default_value);
+				}
+				Context::set('formInfo', $output->data);
+			}
+		}
+
+		$oTemplate = &TemplateHandler::getInstance();
+		$tpl = $oTemplate->compile($this->module_path.'tpl', 'form_insert_item_extra');
+		$this->add('tpl', str_replace("\n"," ",$tpl));
+	}
 }
 ?>

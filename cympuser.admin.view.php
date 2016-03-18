@@ -402,8 +402,8 @@ class cympuserAdminView extends cympuser
 			$member_srl = $this->memberInfo->member_srl;
 			$signature = $oMemberModel->getSignature($member_srl);
 			$memberInfo->signature = $signature;
+			Context::set('member_info', $memberInfo);
 		}
-		Context::set('member_info', $memberInfo);
 
 		// get an editor for the signature
 		if($memberInfo->member_srl)
@@ -422,7 +422,9 @@ class cympuserAdminView extends cympuser
 			Context::set('editor', $editor);
 		}
 
+		debugprint($memberInfo);
 		$formTags = $this->_getMemberInputTag($memberInfo, true);
+		debugprint($formTags);
 		Context::set('formTags', $formTags);
 		$member_config = $this->memberConfig;
 
@@ -697,6 +699,36 @@ class cympuserAdminView extends cympuser
 		Context::set('grant_content', $grant_content);
 
 		$this->setTemplateFile('grantinfo');
+	}
 
+	function dispCympuserAdminGroupList()
+	{
+		$oCympuserModel = &getModel('cympuser');
+		$oMemberModel = &getModel('member');
+
+		$group_list = $oMemberModel->getGroups();
+		foreach($group_list as $group)
+		{
+			$group_srl = $group->group_srl;
+			$options = $oCympuserModel->getCympuserOptionsList($group_srl);
+			$group->options = $options;
+		}
+		Context::set('list', $group_list);
+		$this->setTemplateFile('group_list');
+	}
+
+	function dispCympuserAdminAddOptions() 
+	{
+		$oMemberModel = &getModel('member');
+		$oCympuserModel = &getModel('cympuser');
+
+		$group_srl = Context::get('group_srl');
+		if(!$group_srl) return new Object(-1, 'group_srl is required');
+
+		$member_group_info = $oMemberModel->getGroup($group_srl);
+		$option_list = $oCympuserModel->getCympuserOptionsList($group_srl);
+		Context::set('info', $member_group_info);
+		Context::set('list', $option_list);
+		$this->setTemplateFile('add_options');
 	}
 }

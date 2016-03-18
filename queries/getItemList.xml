@@ -1,6 +1,6 @@
 <query id="getItemList" action="select">
 	<tables>
-		<table name="nproduct_items" />
+		<table name="cympuser_options" />
 	</tables>
 	<columns>
 		<column name="*" />
