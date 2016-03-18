@@ -1,0 +1,166 @@
+/* target modules */
+ul.midCommand { float:left; margin:0 0 0 10px;; padding:0; *zoom:1; }
+ul.midCommand li { display:block; margin-bottom:5px; list-style:none;}
+
+.header_picture {
+	display: block;
+	position: relative;
+	width: 850px;
+}
+
+.header_picture .x_page-header {
+	margin-left: 210px !important;
+}
+
+.header_picture .profile_picture {
+
+}
+/* 학생 이름 */
+.header_picture .profile_picture .personal_page > h2 > span {
+	margin-left: 210px;
+}
+
+.header_picture .profile_picture #profile_image_link {
+	background: rgba(0, 0, 0, 0.3) none repeat scroll 0 0;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.07);
+    display: block;
+    left: 23px;
+    margin-top: -85px;
+    padding: 1px;
+    position: absolute;
+}
+
+.header_picture .profile_picture #profile_image_link a {
+	color: #3b5998;
+    cursor: pointer;
+    text-decoration: none;
+}
+.header_picture .profile_picture #profile_image_link img {
+	display: block;
+	background-color: #fff;
+    border: 4px solid #fff;
+    border-radius: 2px;
+	height: 160px;
+    width: 160px;
+}
+
+.header_picture .profile_picture .update_profile_image #update_profile_image_link {
+	width : 160px;
+	margin-top: -110px;
+	padding-top: 110px;
+	padding-bottom: 15px;
+	margin-left: 27px;
+	text-decoration: none;
+    content: "";
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    transition: top 0.13s ease-out 0s;
+    z-index: 10;	
+}
+
+.header_picture .update_profile_image #update_profile_image_link:hover .update_profile_image_text {
+	opacity: 0.9;
+	background-color: #000;
+}
+
+.header_picture .profile_picture .update_profile_image .update_profile_image_text > img {
+	width: 40px;
+	height: 40px;
+}
+
+.header_picture .profile_picture .update_profile_image .update_profile_image_text {
+	opacity: 0;
+	color : #fff;
+	margin-top: -25px;
+}
+
+.header_menu {
+	clear: right;
+	padding-left: 201px;
+	width: 649px;
+}
+
+.header_menu > ul > li > a{
+	margin-top: 7px !important;
+	padding-top:11px !important;
+}
+
+.x_controls { 
+	padding-top: 5px;
+}
+
+.x_controls_field { 
+	display: block;	
+	width: 30%;
+}
+.x_controls_field:hover { 
+	background-color: #f6f7f8;
+	cursor: pointer;
+}
+
+.x_controls_change_field {
+	display: none;
+}
+
+.value_area {
+	cursor: pointer;
+	position: block;
+	float: left;
+	padding: 0px -10px 5px 20px;
+}
+
+.edit_confirm {
+	display:none;
+	padding: 0px 10px 5px 0px;
+	top: 0;
+	color: #5890ff;
+	min-width: 350px;
+}
+
+.gray {
+	background-color: #f6f7f8;
+}
+
+.side {
+	border : 1px solid #d3d6db;
+	margin-bottom:10px;
+}
+
+.container {
+	width: 100%;
+}
+
+.x_modal {
+	margin: 20% 0 0 -20% !important;
+}
+
+#arrangement.x_modal {
+	margin:0 0 0 -45% !important;
+}
+
+#arrangement .x_modal-body {
+	max-height:none !important;
+}
+
+.x_modal-footer {
+	background-color : #fff !important;
+}
+.location-select {
+	display:none;
+}
+.x_controls ul li {
+	padding-bottom:5px;
+	list-style:none;
+}
+
+#image_controls {
+	display: none;
+}
+
+#previewId {
+	width: 80%;
+}
+

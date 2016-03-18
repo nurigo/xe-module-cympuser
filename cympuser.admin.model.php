@@ -8,6 +8,9 @@
 class cympuserAdminModel extends cympuser 
 {
 
+	/**
+	 * @brief get teamplate for deleting cympuser module instance
+	 */
 	function getCympuserAdminDelete() 
 	{
 		// get configs.
@@ -28,9 +31,8 @@ class cympuserAdminModel extends cympuser
 	 * 
 	 * @return object|array (object : when member count is 1, array : when member count is more than 1)
 	 */
-	function getCympuserMemberList()
+	function getCympuserAdminMemberList()
 	{
-		debugprint("ASDF");
 		// Search option
 		$args = new stdClass();
 		$args->is_admin = Context::get('is_admin')=='Y'?'Y':'';
@@ -133,11 +135,72 @@ class cympuserAdminModel extends cympuser
 		$args->page = Context::get('page');
 		$args->list_count = 20;
 		$args->page_count = 10;
-		debugprint($query_id);
 		$output = executeQuery($query_id, $args);
 
 		return $output;
 	}
 
+	/**
+	 * @brief  get cmpuser adminlist
+	 */
+	function getCympuserAdminItemList()
+	{
+		$oNproductModel = &getModel('nproduct');
+
+		$member_srl = Context::get('member_srl');
+		$target = Context::get('target');
+		if(!$target) $target = 'nstore';
+
+		$args->proc_module = $target;
+		$output = executeQueryArray('cympuser.getItemList', $args);
+		if(!$output->toBool()) return $output;
+
+		$item_list = $output->data;
+		$retobj = $oNproductModel->discountItems($item_list);
+
+		debugprint($item_list);
+		$list_config = $oNproductModel->getListConfig(null);
+		Context::set('list', $item_list);
+		Context::set('target', $target);
+		Context::set('member_srl', $member_srl);
+
+		$path = $this->module_path."tpl/".$module_info->skin;
+		$file_name = "addOrderForm.html";
+		$oTemplate = &TemplateHandler::getInstance();
+		$data = $oTemplate->compile($path, $file_name);
+		$this->add('tpl', $data);
+
+	}
+
+	function getCympuserAdminInsertOptions()
+	{
+		$oMemberModel = &getModel('member');
+		$group_list = $oMemberModel->getGroups();
+		Context::set('group_list', $group_list);
+
+		$group_srl = Context::get('group_srl');
+		$option_srl = Context::get('option_srl');
+		if($option_srl)
+		{
+			$args->option_srl = $option_srl;
+			$output = executeQuery('cympuser.getOptionInfo', $args);
+
+			if($output->toBool() && $output->data)
+			{
+				$formInfo = $output->data;
+				$default_value = $formInfo->default_value;
+				if($default_value)
+				{
+					$default_value = unserialize($default_value);
+					Context::set('default_value', $default_value);
+				}
+				Context::set('formInfo', $output->data);
+			}
+		}
+
+		$oTemplate = &TemplateHandler::getInstance();
+		$tpl = $oTemplate->compile($this->module_path.'tpl', 'form_insert_item_extra');
+		$this->add('tpl', str_replace("\n"," ",$tpl));
+	}
 }
 ?>

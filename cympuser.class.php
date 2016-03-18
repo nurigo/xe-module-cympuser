@@ -13,6 +13,13 @@ class cympuser extends ModuleObject
 	 **/
 	function moduleInstall() 
 	{
+		$oModuleModel = &getModel('module');
+		$oModuleController = &getController('module');
+		if (!$oModuleModel->getTrigger('cympusadmin.getManagerMenu', 'cympuser', 'model', 'triggerGetManagerMenu', 'before')) 
+		{
+			$oModuleController->insertTrigger('cympusadmin.getManagerMenu', 'cympuser', 'model', 'triggerGetManagerMenu', 'before');
+		}
+		
 
 	}
 
@@ -21,7 +28,10 @@ class cympuser extends ModuleObject
 	 **/
 	function checkUpdate() 
 	{
+		$oModuleModel = &getModel('module');
+		if (!$oModuleModel->getTrigger('cympusadmin.getManagerMenu', 'cympuser', 'model', 'triggerGetManagerMenu', 'before')) return true;
 
+		return false;
 	}
 
 	/**
@@ -29,6 +39,13 @@ class cympuser extends ModuleObject
 	 **/
 	function moduleUpdate() 
 	{
+		$oModuleModel = &getModel('module');
+		$oModuleController = &getController('module');
+
+		if (!$oModuleModel->getTrigger('cympusadmin.getManagerMenu', 'cympuser', 'model', 'triggerGetManagerMenu', 'before')) {
+			$oModuleController->insertTrigger('cympusadmin.getManagerMenu', 'cympuser', 'model', 'triggerGetManagerMenu', 'before');
+		}
+
 	}
 
 	/**

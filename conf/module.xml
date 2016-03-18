@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module>
     <grants />
-    <permissions />
+	<permissions>
+		<permission action="dispCympuserAdminMemberList" target="manager" />
+		<permission action="dispCympuserAdminMemberInsert" target="manager"  />
+		<permission action="procCympuserAdminChangeDates" target="manager" />
+		<permission action="procCympuserAdminAddClassDays" target="manager" />
+	</permissions>
 	<menus>
 	</menus>
     <actions>
@@ -9,13 +14,35 @@
 		<action name="dispCympuserAdminModInsert" type="view" />
         <action name="dispCympuserAdminMemberList" type="view" admin_index="true" />
 		<action name="dispCympuserAdminMemberInsert" type="view" />
+		<action name="dispCympuserAdminMemberInfo" type="view" />
+		<action name="dispCympuserAdminAccountInfo" type="view" />
+		<action name="dispCympuserAdminStudyInfo" type="view" />
+		<action name="dispCympuserAdminGuidanceInfo" type="view" />
+		<action name="dispCympuserAdminGrantInfo" type="view" />
+		<action name="dispCympuserAdminGroupList" type="view" />
+		<action name="dispCympuserAdminAddOptions" type="view" />
 
 		<action name="procCympuserAdminModInsert" type="controller" />
 		<action name="procCympuserAdminModDelete" type="controller" />
+		<action name="procCympuserAdminAddProduct" type="controller" />
+		<action name="procCympuserAdminAddClassDays" type="controller" />
+		<action name="procCympuserAdminChangeDates" type="controller" />
+		<action name="procCympuserAdminAddOptions" type="controller" />
+		<action name="procCympuserAdminUpdateOptionsOrder" type="controller" />
+		<action name="procCympuserAdminUpdateOptions" type="controller" />
+		<action name="procCympuserAdminDeleteOptions" type="controller" />
 
 		<action name="getCympuserAdminModDelete" type="model" />
+		<action name="getCympuserAdminElearningManagement" type="model" />
+		<action name="getCympuserAdminNstoreManagement" type="model" />
+		<action name="getCympuserAdminEpayManagement" type="model" />
+		<action name="getCympuserAdminItemList" type="model" />
+		<action name="getCympuserAdminInsertOptions" type="model" />
+		<action name="getCympuserOptionDeleteForm" type="model" />
 
 		<action name="dispCympuserIndex" type="view" index="true" />
+
+		<action name="getCympuserOptionInfo" type="model" />
 
     </actions>
 </module>

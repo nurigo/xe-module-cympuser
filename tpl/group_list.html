@@ -1,0 +1,41 @@
+<load target="js/itemextrasetup.js" />
+<!--%load_js_plugin("ui")-->
+<include target="_header.html" />
+
+<div>
+	<table class="x_table">
+		<thead>
+			<tr>
+				<th style="col-1"> 이동 </th>
+				<th> 항목 </th>
+				<th> 기본그룹 </th>
+				<th> 관리그룹 </th>
+				<th> 옵션(옵션수) </th>
+			</tr>
+		</thead>
+		<tbody id="extraList">
+			<tr loop="$list=>$key,$val" id="record_{$val->group_srl}" class="x_nav-list">
+				<td><span class="iconMoveTo"></span>
+				<td><span>{$val->title}</span></td>
+				<td><span>{$val->is_default}
+						<input cond="0" type="radio" name="is_default[]" data-group_srl="$val->group_srl" id="is_default" data-is_default="{$val->is_default}" checked|cond="$val->is_default=='Y'" /></span></td>
+				<td><span>{$val->is_admin} </span></td>
+				<td>
+					<a href="{getUrl('', 'module', $module, 'act', 'dispCympuserAdminAddOptions', 'group_srl', $val->group_srl)}" class="x_btn">설정({count($val->options)})</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<p class="btnArea">
+		<a href="{getUrl('module', 'cympusadmin', 'act', 'dispMemberAdminGroupList')}" class="x_btn">그룹설정변경하기</a>
+		<a href="#extraDefine" class="x_btn modalAnchor extendFormEdit">항목 추가하기</a>
+	</p>
+</div>
+
+<form action="./" id="extraDefine" class="x_modal" ruleset="insertItemExtra" method="post">
+	<input type="hidden" name="act" value="procCympuserAdminAddOptions" />
+	<input type="hidden" name="success_return_url" value="{getUrl('act', $act)}" />
+	<input type="hidden" name="group_srl" value="{$group_srl}" id="group_srl" />
+	<div id="extendForm">
+	</div>
+</form>

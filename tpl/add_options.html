@@ -1,0 +1,74 @@
+<load target="js/itemextrasetup.js" />
+<!--%load_js_plugin("ui")-->
+<include target="_header.html" />
+
+<div>
+	<table class="x_table">
+		<caption>
+			그룹 : {$info->title}
+
+		</caption>
+		<thead>
+			<tr>
+				<th style="col-1"> 이동 </th>
+				<th> 항목(필드이름) </th>
+				<th> 필수항목 </th>
+				<th> 사용 </th>
+				<th> 항목리스트 </th>
+				<th> 편집 </th>
+			</tr>
+		</thead>
+		<tbody id="extraList">
+			<tr loop="$list=>$key,$val" id="record_{$val->option_srl}" class="x_nav-list">
+				<td><span class="iconMoveTo"></span>
+				<td><span>{$val->column_title}({$val->column_name})</span></td>
+				<td>
+					<input type="checkbox" name="required" value="{$val->required}" class="required" data-required="{$val->required}" data-option_srl="{$val->option_srl}" checked|cond="$val->required=='Y'" />
+				</td>
+				<td>
+					<input type="checkbox" name="is_active" value="{$val->is_active}" class="is_active" data-is_active="{$val->is_active}" data-option_srl="{$val->option_srl}" checked|cond="$val->is_active=='1'" />
+				</td>
+				<td cond="$val->default_value && !is_array($val->default_value)">
+					{$val->default_value} 
+				</td>
+				<td cond="$val->default_value && is_array($val->default_value)">
+					<block loop="$val->default_value=>$v">
+						{$v}&nbsp;
+					</block>
+				</td>
+				<td cond="!$val->default_value"> 없음 </td>
+				<td>
+					<a href="#extraDefine" class="modify modalAnchor _edit" data-option-srl="{$val->option_srl}" >수정</a>
+					<a href="#extraDelete" class="delete modalAnchor extendFormDelete" data-option-srl="{$val->option_srl}" data-column_title="{$val->column_title}">{$lang->cmd_delete}</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<p class="btnArea">
+		<a href="#extraDefine" class="x_btn modalAnchor extendFormEdit">항목 추가하기</a>
+	</p>
+</div>
+
+<form action="./" id="extraDefine" class="x_modal" ruleset="insertItemExtra" method="post">
+	<input type="hidden" name="act" value="procCympuserAdminAddOptions" />
+	<input type="hidden" name="success_return_url" value="{getUrl('act', $act)}" />
+	<input type="hidden" name="group_srl" value="{$group_srl}" id="group_srl" />
+	<div id="extendForm">
+	</div>
+</form>
+
+<form action="./" id="extraDelete" class="x_modal" method="post">
+	<input type="hidden" name="act" value="procCympuserAdminDeleteOptions" />
+	<input type="hidden" name="success_return_url" value="{getUrl('act', $act)}" />
+	<input type="hidden" name="option_srl" id="option_srl" />
+	<input type="hidden" name="module" value="{$module}" />
+	<div class="x_modal-header">
+		<h1>옵션 삭제</h1>
+	</div>
+	<div class="x_modal-body">
+		삭제항목 : <span id="item_to_delete"></span>
+	</div>
+	<div class="x_modal-footer">
+		<button type="submit" class="x_btn x_btn-inverse">{$lang->cmd_delete}</button>
+	</div>
+</form>

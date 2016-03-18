@@ -1,0 +1,12 @@
+<query id="isExistsExtraKey" action="select">
+    <tables>
+        <table name="cympuser_options" />
+    </tables>
+    <columns>
+        <column name="count(*)" alias="count" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="column_name" var="column_name" />
+        <condition operation="equal" column="group_srl" var="group_srl" pipe="and" />
+    </conditions>
+</query>

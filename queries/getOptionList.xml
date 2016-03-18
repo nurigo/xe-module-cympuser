@@ -1,0 +1,15 @@
+<query id="getOptionList" action="select">
+	<tables>
+		<table name="cympuser_options" />
+	</tables>
+	<columns>
+		<column name="*" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="group_srl" var="group_srl" />
+		<condition operation="in" column="group_srl" var="group_srls" pipe="and" />
+	</conditions>
+	<navigation>
+		<index var="sort_index" default="group_srl" order="asc" />
+	</navigation>
+</query>

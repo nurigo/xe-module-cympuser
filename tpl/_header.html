@@ -1,21 +1,21 @@
 <load target="css/style.css" />
 <div class="x_page-header">
-	<h1>
-		발신번호 등록 모듈
-		<a href="#aboutModule" data-toggle class="x_icon-question-sign">{$lang->help}</a>
-	</h1>
-	<p class="x_alert x_alert-info" id="aboutModule" hidden>발신번호 등록 모듈입니다.</p>
+	<h1>회원 관리</h1>
 </div>
 
 <ul class="x_nav x_nav-tabs">
-	<li class="x_active"|cond="$act=='dispCympuserAdminModList'"> <a href="{getUrl('act','dispCympuserAdminModList')}">목록</a> </li>
-	<li cond="$act=='dispCympuserAdminModInsert'" class="x_active"|cond="$act=='dispCympuserAdminModInsert'">
-		<a href="{getUrl('act','dispCympuserAdminModInsert')}">등록</a>
-	</li>
+	<li class="x_active"|cond="$act=='dispCympuserAdminMemberList'"> <a href="{getUrl('act','dispCympuserAdminMemberList', 'group_srl', '', 'member_srl', '')}">회원목록</a> </li>
+	<li cond="$act=='dispCympuserAdminMemberInsert'" class="x_active"|cond="$act=='dispCympuserAdminMemberInsert'"><a href="{getUrl('act','dispCympuserAdminMemberInsert')}">회원등록</a> </li>
+	<li cond="$act=='dispCympuserAdminMemberInfo'" class="x_active"|cond="$act=='dispCympuserAdminMemberInfo'"><a href="{getUrl('act','dispCympuserAdminMemberInfo')}">회원정보</a> </li>
+	<li class="x_active"|cond="$act=='dispCympuserAdminGroupList'"><a href="{getUrl('act', 'dispCympuserAdminGroupList', 'group_srl', '')}">설정</a></li>
+	<li cond="$act=='dispCympuserAdminAddOptions'" class="x_active"|cond="$act=='dispCympuserAdminAddOptions'"><a href="{getUrl('act', 'dispCympuserAdminAddOptions')}">설정등록</a></li>
 </ul>
+
+<ul cond="!$mid && $module_srl" class="x_nav x_nav-tabs">
+	<li class="x_active"|cond="$act=='dispCympuserAdminModInsert'"><a href="{getUrl('act','dispCympuserAdminModInsert', 'module_srl', $module_srl)}">{$lang->page_configuration}</a></li>
+	<li class="x_active"|cond="$act=='dispCympuserAdminGrantInfo'"><a href="{getUrl('act','dispCympuserAdminGrantInfo', 'module_srl', $module_srl)}">{$lang->permission_setting}</a></li>
+</ul>
+
 <div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
 	<p>{$XE_VALIDATOR_MESSAGE}</p>
 </div>
-
-
-

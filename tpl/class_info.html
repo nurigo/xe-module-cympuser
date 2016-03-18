@@ -1,0 +1,204 @@
+<load target="js/class_info.js" />
+<div id="class_info">
+	<!--div class="order_menu" style="margin-bottom:20px;">
+		<a href="{getUrl('status','0')}" class="active"|cond="$status=='0'" cond="0">{$lang->cart}</a> <i>|</i>
+		<a href="{getUrl('status','1')}" class="active"|cond="$status=='1'">{$lang->wait_deposit}</a> <i>|</i>
+		<a href="{getUrl('status','2')}" class="active"|cond="$status=='2'">{$lang->deposit_done}</a> <i>|</i>
+		<a href="{getUrl('status','3')}" class="active"|cond="$status=='3'">{$lang->taking_lesson}</a> <i>|</i>
+		<a href="{getUrl('status','4')}" class="active"|cond="$status=='4'">{$lang->lesson_finished}</a> <i>|</i>
+		<a href="{getUrl('status','A')}" class="active"|cond="$status=='A'">{$lang->cancelled}</a> <i>|</i>
+		<a href="{getUrl('status','C')}" class="active"|cond="$status=='C'">{$lang->refund}</a>
+	</div-->
+
+	<!--form id="searchForm" action="./" method="get" class="x_input-append">
+		<input type="hidden" name="module" value="{$module}" />
+		<input type="hidden" name="act" value="{$act}" />
+		<input type="hidden" name="status" value="{$status}" />
+		<input type="hidden" name="error_return_url" value="" />
+		<select name="search_key">
+			<option value="user_id" selected="selected"|cond="$search_key=='user_id'">{$lang->user_id}</option>
+			<option value="email_address" selected="selected"|cond="$search_key=='email_address'">{$lang->email_address}</option>
+			<option value="nick_name" selected="selected"|cond="$search_key=='nick_name'">{$lang->nick_name}</option>
+			<option value="user_name" selected="selected"|cond="$search_key=='user_name'">{$lang->user_name}</option>
+		</select>
+		<input type="text" name="search_value" value="{$search_value}" />
+		<button type="submit" class="x_btn x_btn-inverse">{$lang->cmd_find}</button> 
+	</form-->
+
+	<form action="./" class="x_input-append" method="post" id="fo_classlist">
+		<input type="hidden" name="module" value="{$module}" />
+		<input type="hidden" name="act" value="procElearningAdminUpdateEnrollmentStatus" />
+		<input type="hidden" name="status" value="{$status}"/>
+		<input type="hidden" name="success_return_url" value="{getUrl('module', 'cympusadmin', 'act', $act, 'member_srl', $member_srl)}" />
+
+		<div id="orderlist" class="table even easyList">
+			<table class="x_table x_table-striped x_table-hover" summary="{$lang->enrollment_list}" id="class_table">
+				<caption style="text-align:right; margin-bottom:10px;">
+					<a href="{getUrl('act','procElearningAdminCSVDownload')}" ><span>{$lang->cmd_csv_download}</span></a>
+				</caption>
+				<thead>
+					<tr>
+						<th><input type="checkbox" title="Check All" id="check_all" /></th>
+						<th>{$lang->regdate}</th>
+						<th>{$lang->lecture_title}</th>
+						<th cond="0">{$lang->for_free}</th>
+						<th>{$lang->period}</th>
+						<th>{$lang->begin_date}</th>
+						<th>{$lang->end_date}</th>
+						<th>{$lang->payment_amount}</th>
+						<th>{$lang->memo}</th>
+						<th>수강일 추가</th>
+						<th>{$lang->study_state}</th>
+						<th>{$lang->title_order_info}</th>
+						<th>{$lang->cmd_modify}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr loop="$class_list=>$no,$order" onclick="setCheckBox({$order->cart_srl})">
+						<td><input type="hidden" name="cart_srls[]" value="{$order->cart_srl}" /><input type="checkbox" id="checkbox_{$order->cart_srl}" name="cart[]" value="{$order->cart_srl}" /></td>
+						<td>{zdate($order->regdate,'Y-m-d')}</td>
+						<td>{$order->item_name}</td>
+						<td class="change_to_input" data-mid="{$mid}" data-target="period_days" data-cart_srl="{$order->cart_srl}">
+							<span id="period_days_{$order->cart_srl}">{$order->period_days}</span></td>
+						<td cond="strlen($order->startdate)==14" class="change_to_input" data-mid="{$mid}" data-target="startdate"  data-cart_srl="{$order->cart_srl}">
+							<span id="startdate_{$order->cart_srl}">{zdate($order->startdate,'Y-m-d')}</span></td>
+						<td cond="strlen($order->startdate)!=14" class="change_to_input" data-mid="{$mid}" data-target="startdate"  data-cart_srl="{$order->cart_srl}">
+							<span id="startdate_{$order->cart_srl}">{$order->startdate}</span></td>
+						<td cond="strlen($order->enddate)==14" class="change_to_input" data-mid="{$mid}" data-target="enddate"  data-cart_srl="{$order->cart_srl}">
+							<span id="enddate_{$order->cart_srl}">{zdate($order->enddate,'Y-m-d')}</span></td>
+						<td cond="strlen($order->enddate)!=14" class="change_to_input" data-mid="{$mid}" data-target="enddate"  data-cart_srl="{$order->cart_srl}">
+							<span id="enddate_{$order->cart_srl}">{$order->enddate}</span></td>
+						<td>{number_format($order->price)}</td>
+						<td title="{$order->memo}">{cut_str($order->memo,20)}</td>
+						<td>
+							<select style="width:100px;" class="add_days" id="add_days_{$order->cart_srl}" data-cart_srl="{$order->cart_srl}">
+								<option value="0">선택</option>
+								<option value="1">1일</option>
+								<option value="2">2일</option>
+								<option value="3">3일</option>
+								<option value="4">4일</option>
+								<option value="5">5일</option>
+								<option value="10">10일</option>
+								<option value="15">15일</option>
+								<option value="20">20일</option>
+								<option value="30">30일</option>
+								<option value="60">60일</option>
+								<option value="120">120일</option>
+								<option value="admin">관리자입력</option>
+							</select>
+							<span id="admin_input_{$order->cart_srl}"></span>
+							<input type="button" id="add_class" class="add_class x_btn" value="{$lang->cmd_add}" data-cart_srl="{$order->cart_srl}" />
+						</td>
+						<!--td><a href="#viewEnrollmentStatus" class="modalAnchor viewEnrollmentStatus" data-mid="{$mid}" data-cart-srl="{$order->cart_srl}">{$lang->study_state}</a></td-->
+						<td cond="$order->order_status == '1'">{$lang->wait_deposit}</td>
+						<td cond="$order->order_status == '2'">{$lang->deposit_done}</td>
+						<td cond="$order->order_status == '3'">{$lang->taking_lesson}</td>
+						<td cond="$order->order_status == '4'">{$lang->lesson_finished}</td>
+						<td cond="$order->order_status == 'A'">{$lang->cancelled}</td>
+						<td cond="$order->order_status == 'C'">{$lang->refund}</td>
+						<td><a href="#viewOrderInfo" class="modalAnchor viewOrderInfo" data-mid="{$mid}" data-order-srl="{$order->order_srl}">{$lang->title_order_info}</a></td>
+						<td><a href="#updateEnrollment" class="modalAnchor updateEnrollment" data-mid="{$mid}" data-cart-srl="{$order->cart_srl}">{$lang->cmd_modify}</a></td>
+					</tr>
+					<tr cond="!count($class_list)">
+						<td colspan="9">{$lang->msg_no_purchased}</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="x_control-group">
+				<label class="x_control-label x_inline" style="cursor: default; vertical-align: bottom;">{$lang->for_selected_items}</label>
+				{@unset($order_status['0'])}
+				<div class="x_controls x_inline">
+					<select name="order_status">
+						<option value="1">{$lang->wait_deposit}</option>
+						<option value="2" selected="selected"|cond="$status=='1'">{$lang->deposit_done}</option>
+						<option value="3" selected="selected"|cond="$status=='2'">{$lang->taking_lesson}</option>
+						<option value="4" selected="selected"|cond="$status=='3'">{$lang->lesson_finished}</option>
+						<option value="A" selected="selected"|cond="$status=='4'">{$lang->cancelled}</option>
+						<option value="C" selected="selected"|cond="$status=='A'">{$lang->refund}</option>
+						<option value="Z">{$lang->cmd_delete}</option>
+					</select>
+					<button class="x_btn x_btn-inverse" onclick="update_class_status();return false;">{$lang->cmd_apply}</button> 
+					<a style="margin-left:2px;"href="#deleteEnrollments" data-mid="{$mid}" class="modalAnchor deleteEnrollments x_btn x_btn-inverse">{$lang->cmd_delete}</a></span>
+				</div><!-- x_controls -->
+			</div><!-- x_control-group -->
+
+		</div><!-- orderlist -->
+	</form>
+
+	<include target="_class_page_navigation.html" />
+	
+	<!-- 페이지 네비게이션 -->
+	<div cond="0" class="x_clearfix">
+		<a href="{getUrl('page','','module_srl','')}" class="prevEnd">{$lang->first_page}</a> 
+		<!--@while($page_no = $page_navigation->getNextPage())-->
+			<!--@if($page == $page_no)-->
+				<strong>{$page_no}</strong> 
+			<!--@else-->
+				<a href="{getUrl('page',$page_no,'module_srl','')}">{$page_no}</a> 
+			<!--@end-->
+		<!--@end-->
+		<a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" class="nextEnd">{$lang->last_page}</a>
+	</div>
+
+	<form action="./" class="x_modal" method="post" id="viewEnrollmentStatus">
+		<input type="hidden" name="module" value="{$module}" />
+		<div class="x_modal-header">
+			<h1>{$lang->study_state}</h1>
+		</div>
+		<div id="enrollmentStatus" class="x_modal-body" style="max-height:900px">
+		</div>
+	</form>
+
+	<form action="./" class="x_modal" method="post" id="updateEnrollment">
+		<input type="hidden" name="module" value="{$module}" />
+		<input type="hidden" name="act" value="procElearningAdminUpdateEnrollment" />
+		<input type="hidden" name="status" value="{$status}" />
+		<input type="hidden" name="success_return_url" value="{getUrl('module', 'cympusadmin', 'act', $act, 'member_srl', $member_srl)}" />
+		<div class="x_modal-header">
+			<h1>{$lang->enrollment_status}</h1>
+		</div>
+		<div id="enrollmentForm" class="x_modal-body" style="max-height:630px">
+		</div>
+		<div class="x_modal-footer">
+			<button type="submit" class="x_btn x_btn-inverse">{$lang->cmd_update}</button>
+		</div>
+	</form>
+
+	<div class="x_modal" id="deleteEnrollments">
+		<form action="./" class="fg form" method="post">
+				<input type="hidden" name="module" value="{$module}" />
+				<input type="hidden" name="mid" value="{$mid}" />
+				<input type="hidden" name="act" value="procElearningAdminDeleteEnrollment" />
+				<input type="hidden" name="module_srl" value="{$module_srl}" />
+				<input type="hidden" name="status" value="{$status}" />
+				<input type="hidden" name="success_return_url" value="{getUrl('module', 'cympusadmin', 'act', 'dispCympuserAdminMemberInsert', 'member_srl', $member_srl)}" />
+				<div id="class_deleteForm">
+				</div>
+		</form>
+	</div>
+
+	<script>
+		function update_class_status() {
+			var order_status = jQuery('select[name=order_status]').val();
+			if (order_status == 'Z') {
+				jQuery('a.modalAnchor.deleteEnrollments').trigger('open.mw');
+			} else {
+				var $fo = jQuery('#fo_classlist');
+				$fo.submit();
+			}
+		}
+
+		(function($){
+			$('#check_all')
+				.bind('click', function(e){
+					if (this.checked){
+						$('input[name=cart\\[\\]]').attr('checked', 'checked');
+					}else{
+						$('input[name=cart\\[\\]]').removeAttr('checked');
+					}
+				});
+		})(jQuery);
+	</script>
+	
+
+</div>
